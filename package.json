@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/BioBoost/phaser3-breakout/issues"
   },
-  "homepage": "https://github.com/BioBoost/phaser3-breakout#readme"
+  "homepage": "https://github.com/BioBoost/phaser3-breakout#readme",
+  "dependencies": {
+    "serve": "^10.1.2"
+  }
 }

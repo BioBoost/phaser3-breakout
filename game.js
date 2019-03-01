@@ -46,8 +46,11 @@ function create () {
     setXY: { x: 150, y: 150, stepX: 85 }
   });
 
-  // Make the ball collide with the blocks
-  this.physics.add.collider(balls, blocks);
+  // Allow ball to destroy the blocks but still make ball
+  // separate from block (bounce off)
+  this.physics.add.collider(balls, blocks, function(ball, block) {
+    block.disableBody(true, true);
+  });
 }
 
 function update () {

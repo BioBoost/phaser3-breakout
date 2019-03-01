@@ -17,10 +17,12 @@ var config = {
 
 let game = new Phaser.Game(config);
 let balls;
+let blocks;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
   this.load.image('ball', 'assets/ball.png');
+  this.load.image('block', 'assets/blocks/a.png');
 }
 
 function create () {
@@ -36,6 +38,13 @@ function create () {
   ball.setCollideWorldBounds(true);
   ball.setBounce(1);  // Keep bouncing
   ball.setVelocity(200, 200);
+
+  // Create a list of blocks as static objects
+  blocks = this.physics.add.staticGroup({
+    key: 'block',
+    repeat: 11,   // 12 in total
+    setXY: { x: 150, y: 150, stepX: 80 }
+  });
 }
 
 function update () {

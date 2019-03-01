@@ -22,6 +22,7 @@ let coins;
 let ground;
 let lives = 2;
 let livesText;
+let paddle;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
@@ -29,6 +30,7 @@ function preload () {
   this.load.image('block', 'assets/blocks/a.png');
   this.load.image('coin', 'assets/coin.png');
   this.load.image('ground', 'assets/ground.png');
+  this.load.image('paddle', 'assets/paddles/basic.png');
 }
 
 function create () {
@@ -92,6 +94,9 @@ function create () {
       }
     }
   }, null, this);
+
+  // Setup the player paddle
+  paddle =  this.physics.add.staticImage(640, 780, 'paddle');
 }
 
 function update () {

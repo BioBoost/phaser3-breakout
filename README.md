@@ -10,3 +10,7 @@ Just use `serve` as a local server for hosting the assets and such.
 npm install
 serve
 ```
+
+## Docs
+
+Really useful notes on Phaser 3 can be found here [https://rexrainbow.github.io/phaser3-rex-notes/docs/site/](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/).

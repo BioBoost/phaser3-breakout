@@ -5,7 +5,6 @@ var config = {
   physics: {
       default: 'arcade',
       arcade: {
-          gravity: { y: 300 },
           debug: false
       }
   },
@@ -28,10 +27,15 @@ function create () {
   this.add.image(0, 0, 'background').setOrigin(0, 0);
 
   // Create the list of balls as a dynamic physics body group
-  balls = this.physics.add.group({
-    key: 'ball',
-    setXY: { x: 640, y: 500 }
-  });
+  balls = this.physics.add.group();
+
+  // Create initial ball
+  let ball = balls.create(640, 400, 'ball');
+  // Stop from falling through bottom of scene
+  // Does not stop from falling through platforms
+  ball.setCollideWorldBounds(true);
+  ball.setBounce(1);  // Keep bouncing
+  ball.setVelocity(200, 200);
 }
 
 function update () {

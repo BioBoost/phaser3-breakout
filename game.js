@@ -20,7 +20,7 @@ let balls;
 let blocks;
 let coins;
 let ground;
-let lives = 1;
+let lives = 2;
 let livesText;
 
 function preload () {
@@ -73,6 +73,25 @@ function create () {
 
   // Add score
   livesText = this.add.text(1050, 16, 'lives: ' + lives, { fontSize: '32px', fill: '#fff' });
+
+  // Ball collisions with the ground
+  this.physics.add.overlap(ground, balls, function(ground, ball) {
+    ball.disableBody(true, true);
+
+    if (balls.countActive(true) === 0) {
+      lives -= 1;
+      livesText.setText('lives: ' + lives);
+      if (lives === 0) {
+        this.physics.pause();
+      } else {
+        // Spawn a new ball
+        let ball = balls.create(640, 400, 'ball');
+        ball.setCollideWorldBounds(true);     // Stop from falling through bottom of scene
+        ball.setBounce(1);  // Keep bouncing
+        ball.setVelocity(200, 200);
+      }
+    }
+  }, null, this);
 }
 
 function update () {

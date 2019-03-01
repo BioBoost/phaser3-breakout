@@ -20,6 +20,8 @@ let balls;
 let blocks;
 let coins;
 let ground;
+let lives = 1;
+let livesText;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
@@ -68,6 +70,9 @@ function create () {
   this.physics.add.overlap(ground, coins, function(ground, coin) {
     coin.disableBody(true, true);
   }, null, this);
+
+  // Add score
+  livesText = this.add.text(1050, 16, 'lives: ' + lives, { fontSize: '32px', fill: '#fff' });
 }
 
 function update () {

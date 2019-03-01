@@ -18,11 +18,15 @@ var config = {
 let game = new Phaser.Game(config);
 let balls;
 let blocks;
+let coins;
+let ground;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
   this.load.image('ball', 'assets/ball.png');
   this.load.image('block', 'assets/blocks/a.png');
+  this.load.image('coin', 'assets/coin.png');
+  this.load.image('ground', 'assets/ground.png');
 }
 
 function create () {
@@ -48,9 +52,22 @@ function create () {
 
   // Allow ball to destroy the blocks but still make ball
   // separate from block (bounce off)
+  coins = this.physics.add.group();
   this.physics.add.collider(balls, blocks, function(ball, block) {
     block.disableBody(true, true);
-  });
+
+    // Spawn a coin for destroying the block
+    let coin = coins.create(block.x, block.y, 'coin');
+    coin.setCollideWorldBounds(true);
+    // coin.setVelocity(0, 100);
+    coin.setGravityY(80);
+  }, null, this);
+
+  // Create bottom ground (ball and coin killer)
+  ground =  this.physics.add.staticImage(0, 796, 'ground').setOrigin(0, 0).refreshBody();
+  this.physics.add.overlap(ground, coins, function(ground, coin) {
+    coin.disableBody(true, true);
+  }, null, this);
 }
 
 function update () {

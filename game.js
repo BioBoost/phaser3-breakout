@@ -23,6 +23,7 @@ let ground;
 let lives = 2;
 let livesText;
 let paddle;
+let cursors;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
@@ -96,8 +97,23 @@ function create () {
   }, null, this);
 
   // Setup the player paddle
-  paddle =  this.physics.add.staticImage(640, 780, 'paddle');
+  paddle =  this.physics.add.image(640, 780, 'paddle');
+  paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
+  this.physics.add.collider(paddle, balls);
+
+  // Register events for keyboard
+  cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update () {
+  // Check for keyboard events
+  if (cursors.left.isDown) {
+    paddle.setVelocityX(-450);
+  }
+  else if (cursors.right.isDown) {
+    paddle.setVelocityX(450);
+  }
+  else {
+    paddle.setVelocityX(0);
+  }
 }

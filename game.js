@@ -24,6 +24,8 @@ let lives = 2;
 let livesText;
 let paddle;
 let cursors;
+let score = 0;
+let scoreText;
 
 function preload () {
   this.load.image('background', 'assets/backgrounds/space.jpg');
@@ -76,6 +78,7 @@ function create () {
 
   // Add score
   livesText = this.add.text(1050, 16, 'lives: ' + lives, { fontSize: '32px', fill: '#fff' });
+  scoreText = this.add.text(50, 16, 'score: ' + score, { fontSize: '32px', fill: '#fff' });
 
   // Ball collisions with the ground
   this.physics.add.overlap(ground, balls, function(ground, ball) {
@@ -103,6 +106,13 @@ function create () {
 
   // Register events for keyboard
   cursors = this.input.keyboard.createCursorKeys();
+
+  // Paddle collisions with the coins
+  this.physics.add.overlap(paddle, coins, function(paddle, coin) {
+    coin.disableBody(true, true);
+    score += 10;
+    scoreText.setText('score: ' + score);
+  }, null, this);
 }
 
 function update () {

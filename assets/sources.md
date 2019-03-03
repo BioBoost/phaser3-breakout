@@ -8,4 +8,5 @@
 ## Sounds
 
 * block hit: [https://freesound.org/people/thanvannispen/sounds/9565/](https://freesound.org/people/thanvannispen/sounds/9565/)
+* ball paddle: [https://freesound.org/people/Robinhood76/sounds/95933/](https://freesound.org/people/Robinhood76/sounds/95933/)
 * coin eat: [https://freesound.org/people/gblanke/sounds/265292/](https://freesound.org/people/gblanke/sounds/265292/)

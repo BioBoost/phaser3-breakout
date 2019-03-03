@@ -110,7 +110,7 @@ function create () {
   }, null, this);
 
   // Setup the player paddle
-  paddle =  this.physics.add.image(640, 780, 'paddle').setScale(2, 1);
+  paddle = this.physics.add.image(640, 780, 'paddle').setScale(2, 1);
   paddle.setCollideWorldBounds(true);
     // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
   paddle.setImmovable();    // Dont allow paddle to be knocked away by ball

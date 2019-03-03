@@ -2,7 +2,7 @@ const gameParams = {
   lives: 3,
   paddle: {
     max_speed: 500,
-    initial_size: 2
+    initial_size: 4
   }
 };
 
@@ -12,29 +12,13 @@ class GameScene extends Phaser.Scene {
         key: 'GameScene'
     });
 
-    this.balls = undefined;
-    this.blocks = undefined;
-    this.coins = undefined;
-    this.ground = undefined;
     this.lives = gameParams.lives;
-    this.livesText = undefined;
-    this.paddle = undefined;
-    this.cursors = undefined;
     this.score = 0;
-    this.scoreText = undefined;
   }
 
   preload() {
-    this.load.image('background', 'assets/backgrounds/space.jpg');
-    this.load.image('ball', 'assets/ball.png');
-    this.load.image('block', 'assets/blocks/a.png');
-    this.load.image('coin', 'assets/coin.png');
-    this.load.image('ground', 'assets/ground.png');
-    this.load.image('paddle', 'assets/paddles/basic.png');
-  
-    this.load.audio('block', 'assets/sounds/block_hit.mp3');
-    this.load.audio('paddle', 'assets/sounds/paddle_hit.wav');
-    this.load.audio('coin-eat', 'assets/sounds/coin_eat.wav');
+    this.loadImages();
+    this.loadSounds();
   }
 
   create() {
@@ -47,14 +31,7 @@ class GameScene extends Phaser.Scene {
   
     // Create the list of balls as a dynamic physics body group
     this.balls = this.physics.add.group();
-  
-    // Create initial ball
-    let ball = this.balls.create(640, 400, 'ball');
-    // Stop from falling through bottom of scene
-    // Does not stop from falling through platforms
-    ball.setCollideWorldBounds(true);
-    ball.setBounce(1);  // Keep bouncing
-    ball.setVelocity(200, 200);
+    this.addBall(this.balls);   // Create initial ball
   
     // Create a list of blocks as static objects
     this.blocks = this.physics.add.staticGroup({
@@ -98,19 +75,14 @@ class GameScene extends Phaser.Scene {
           this.physics.pause();
         } else {
           // Spawn a new ball
-          let ball = this.balls.create(640, 400, 'ball');
-          ball.setCollideWorldBounds(true);     // Stop from falling through bottom of scene
-          ball.setBounce(1);  // Keep bouncing
-          ball.setVelocity(200, 200);
+          this.addBall(this.balls);
         }
       }
     }, null, this);
   
     // Setup the player paddle
-    this.paddle = this.physics.add.image(640, 780, 'paddle').setScale(gameParams.paddle.initial_size, 1);
-    this.paddle.setCollideWorldBounds(true);
-      // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
-      this.paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
+    this.paddle = this.createPaddle();
+
     this.physics.add.collider(this.paddle, this.balls, function(paddle, ball) {
       this.sound.play('paddle');
       if (ball.x < paddle.x) {    // Ball hits left side of paddle
@@ -147,6 +119,38 @@ class GameScene extends Phaser.Scene {
       this.paddle.setVelocityX(0);
     }
   }
+
+  loadImages() {
+    this.load.image('background', 'assets/backgrounds/space.jpg');
+    this.load.image('ball', 'assets/ball.png');
+    this.load.image('block', 'assets/blocks/a.png');
+    this.load.image('coin', 'assets/coin.png');
+    this.load.image('ground', 'assets/ground.png');
+    this.load.image('paddle', 'assets/paddles/basic.png');
+  }
+
+  loadSounds() {
+    this.load.audio('block', 'assets/sounds/block_hit.mp3');
+    this.load.audio('paddle', 'assets/sounds/paddle_hit.wav');
+    this.load.audio('coin-eat', 'assets/sounds/coin_eat.wav');
+  }
+
+  createPaddle() {
+    let paddle = this.physics.add.image(640, 780, 'paddle').setScale(gameParams.paddle.initial_size, 1);
+    paddle.setCollideWorldBounds(true);
+      // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
+    paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
+    return paddle;
+  }
+
+  addBall(balls) {
+    let ball = balls.create(640, 400, 'ball');
+    ball.setCollideWorldBounds(true);     // Bounce of scene edges
+    ball.setBounce(1);  // Keep bouncing
+    ball.setVelocity(200, 200);
+    return ball;
+  }
+
 };
 
 export default GameScene;

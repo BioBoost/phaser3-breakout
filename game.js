@@ -15,12 +15,20 @@ var config = {
   }
 };
 
+var gameParams = {
+  lives: 3,
+  paddle: {
+    max_speed: 500,
+    initial_size: 2
+  }
+};
+
 let game = new Phaser.Game(config);
 let balls;
 let blocks;
 let coins;
 let ground;
-let lives = 2;
+let lives = gameParams.lives;
 let livesText;
 let paddle;
 let cursors;
@@ -110,7 +118,7 @@ function create () {
   }, null, this);
 
   // Setup the player paddle
-  paddle = this.physics.add.image(640, 780, 'paddle').setScale(2, 1);
+  paddle = this.physics.add.image(640, 780, 'paddle').setScale(gameParams.paddle.initial_size, 1);
   paddle.setCollideWorldBounds(true);
     // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
   paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
@@ -141,10 +149,10 @@ function create () {
 function update () {
   // Check for keyboard events
   if (cursors.left.isDown) {
-    paddle.setVelocityX(-450);
+    paddle.setVelocityX(-gameParams.paddle.max_speed);
   }
   else if (cursors.right.isDown) {
-    paddle.setVelocityX(450);
+    paddle.setVelocityX(gameParams.paddle.max_speed);
   }
   else {
     paddle.setVelocityX(0);

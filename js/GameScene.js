@@ -56,20 +56,7 @@ class GameScene extends Phaser.Scene {
     this.scoreText = this.add.text(50, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#fff' });
   
     // Ball collisions with the ground
-    this.physics.add.overlap(this.ground, this.balls, function(ground, ball) {
-      ball.disableBody(true, true);
-  
-      if (this.balls.countActive(true) === 0) {
-        this.lives -= 1;
-        this.livesText.setText('lives: ' + this.lives);
-        if (this.lives === 0) {
-          this.physics.pause();
-        } else {
-          // Spawn a new ball
-          this.addBall(this.balls);
-        }
-      }
-    }, null, this);
+    this.physics.add.overlap(this.ground, this.balls, this.ballHitsGround, null, this);
   
     // Setup the player paddle
     this.paddle = this.createPaddle();
@@ -153,6 +140,21 @@ class GameScene extends Phaser.Scene {
     let coin = this.coins.create(block.x, block.y, 'coin');
     coin.setCollideWorldBounds(true);
     coin.setGravityY(80);
+  }
+
+  ballHitsGround(ground, ball) {
+    ball.disableBody(true, true);
+  
+    if (this.balls.countActive(true) === 0) {
+      this.lives -= 1;
+      this.livesText.setText('lives: ' + this.lives);
+      if (this.lives === 0) {
+        this.physics.pause();
+      } else {
+        // Spawn a new ball
+        this.addBall(this.balls);
+      }
+    }
   }
 
 };

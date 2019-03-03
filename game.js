@@ -34,10 +34,19 @@ function preload () {
   this.load.image('coin', 'assets/coin.png');
   this.load.image('ground', 'assets/ground.png');
   this.load.image('paddle', 'assets/paddles/basic.png');
+
+  this.load.audio('block', 'assets/sounds/block_hit.mp3');
+  this.load.audio('paddle', 'assets/sounds/paddle_hit.wav');
+  this.load.audio('coin-eat', 'assets/sounds/coin_eat.wav');
 }
 
 function create () {
   this.add.image(0, 0, 'background').setOrigin(0, 0);
+
+  // Add sounds
+  this.sound.add('block');
+  this.sound.add('paddle');
+  this.sound.add('coin-eat');
 
   // Create the list of balls as a dynamic physics body group
   balls = this.physics.add.group();
@@ -62,6 +71,7 @@ function create () {
   coins = this.physics.add.group();
   this.physics.add.collider(balls, blocks, function(ball, block) {
     block.disableBody(true, true);
+    this.sound.play('block');
 
     // Spawn a coin for destroying the block
     let coin = coins.create(block.x, block.y, 'coin');
@@ -104,6 +114,7 @@ function create () {
     // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
   paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
   this.physics.add.collider(paddle, balls, function(paddle, ball) {
+    this.sound.play('paddle');
     if (ball.x < paddle.x) {    // Ball hits left side of paddle
       let xDiff = paddle.x - ball.x;
       // Increase horizontal speed vector based on distance from center of paddle
@@ -120,6 +131,7 @@ function create () {
   // Paddle collisions with the coins
   this.physics.add.overlap(paddle, coins, function(paddle, coin) {
     coin.disableBody(true, true);
+    this.sound.play('coin-eat');
     score += 10;
     scoreText.setText('score: ' + score);
   }, null, this);

@@ -88,12 +88,7 @@ class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
   
     // Paddle collisions with the coins
-    this.physics.add.overlap(this.paddle, this.coins, function(paddle, coin) {
-      coin.disableBody(true, true);
-      this.sound.play('coin-eat');
-      this.score += 10;
-      this.scoreText.setText('score: ' + this.score);
-    }, null, this);
+    this.physics.add.overlap(this.paddle, this.coins, this.paddleCollectsCoin, null, this);
   }
 
   update() {
@@ -150,6 +145,13 @@ class GameScene extends Phaser.Scene {
       let xDiff = ball.x - paddle.x;
       ball.setVelocityX(10 * xDiff);
     } // else middle, dont do anything
+  }
+
+  paddleCollectsCoin(paddle, coin) {
+    coin.disableBody(true, true);
+    this.sound.play('coin-eat');
+    this.score += 10;
+    this.scoreText.setText('score: ' + this.score);
   }
 
 };

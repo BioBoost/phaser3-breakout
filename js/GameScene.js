@@ -1,3 +1,5 @@
+import MapLoader from './MapLoader.js';
+
 const gameParams = {
   lives: 3,
   paddle: {
@@ -19,6 +21,8 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.loadImages();
     this.loadSounds();
+    
+    this.load.json('map-tutorial', 'assets/maps/tutorial.json');
   }
 
   create() {
@@ -34,11 +38,7 @@ class GameScene extends Phaser.Scene {
     this.addBall(this.balls);   // Create initial ball
   
     // Create a list of blocks as static objects
-    this.blocks = this.physics.add.staticGroup({
-      key: 'block',
-      repeat: 11,   // 12 in total
-      setXY: { x: 150, y: 150, stepX: 85 }
-    });
+    this.blocks = MapLoader.loadMap(this, 'tutorial');
   
     // Allow ball to destroy the blocks but still make ball
     // separate from block (bounce off)

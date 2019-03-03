@@ -47,11 +47,9 @@ class GameScene extends Phaser.Scene {
   
     // Create bottom ground (ball and coin killer)
     this.ground =  this.physics.add.staticImage(0, 796, 'ground').setOrigin(0, 0).refreshBody();
-    this.physics.add.overlap(this.ground, this.coins, function(ground, coin) {
-      coin.disableBody(true, true);
-    }, null, this);
+    this.physics.add.overlap(this.ground, this.coins, this.coinHitsGround, null, this);
   
-    // Add score
+    // Add lives and score
     this.livesText = this.add.text(1050, 16, 'lives: ' + this.lives, { fontSize: '32px', fill: '#fff' });
     this.scoreText = this.add.text(50, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#fff' });
   
@@ -155,6 +153,10 @@ class GameScene extends Phaser.Scene {
         this.addBall(this.balls);
       }
     }
+  }
+
+  coinHitsGround(ground, coin) {
+    coin.disableBody(true, true);
   }
 
 };

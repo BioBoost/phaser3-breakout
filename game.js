@@ -102,7 +102,16 @@ function create () {
   // Setup the player paddle
   paddle =  this.physics.add.image(640, 780, 'paddle');
   paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
-  this.physics.add.collider(paddle, balls);
+  this.physics.add.collider(paddle, balls, function(paddle, ball) {
+    if (ball.x < paddle.x) {    // Ball hits left side of paddle
+      let xDiff = paddle.x - ball.x;
+      // Increase horizontal speed vector based on distance from center of paddle
+      ball.setVelocityX(-10 * xDiff);
+    } else if (ball.x > paddle.x) {
+      let xDiff = ball.x - paddle.x;
+      ball.setVelocityX(10 * xDiff);
+    } // else middle, dont do anything
+  }, null, this);
 
   // Register events for keyboard
   cursors = this.input.keyboard.createCursorKeys();

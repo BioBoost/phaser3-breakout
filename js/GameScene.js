@@ -82,18 +82,7 @@ class GameScene extends Phaser.Scene {
   
     // Setup the player paddle
     this.paddle = this.createPaddle();
-
-    this.physics.add.collider(this.paddle, this.balls, function(paddle, ball) {
-      this.sound.play('paddle');
-      if (ball.x < paddle.x) {    // Ball hits left side of paddle
-        let xDiff = paddle.x - ball.x;
-        // Increase horizontal speed vector based on distance from center of paddle
-        ball.setVelocityX(-10 * xDiff);
-      } else if (ball.x > paddle.x) {
-        let xDiff = ball.x - paddle.x;
-        ball.setVelocityX(10 * xDiff);
-      } // else middle, dont do anything
-    }, null, this);
+    this.physics.add.collider(this.paddle, this.balls, this.ballHitsPaddle, null, this);
   
     // Register events for keyboard
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -149,6 +138,18 @@ class GameScene extends Phaser.Scene {
     ball.setBounce(1);  // Keep bouncing
     ball.setVelocity(200, 200);
     return ball;
+  }
+
+  ballHitsPaddle(paddle, ball) {
+    this.sound.play('paddle');
+    if (ball.x < paddle.x) {    // Ball hits left side of paddle
+      let xDiff = paddle.x - ball.x;
+      // Increase horizontal speed vector based on distance from center of paddle
+      ball.setVelocityX(-10 * xDiff);
+    } else if (ball.x > paddle.x) {
+      let xDiff = ball.x - paddle.x;
+      ball.setVelocityX(10 * xDiff);
+    } // else middle, dont do anything
   }
 
 };

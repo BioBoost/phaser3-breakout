@@ -43,16 +43,7 @@ class GameScene extends Phaser.Scene {
     // Allow ball to destroy the blocks but still make ball
     // separate from block (bounce off)
     this.coins = this.physics.add.group();
-    this.physics.add.collider(this.balls, this.blocks, function(ball, block) {
-      block.disableBody(true, true);
-      this.sound.play('block');
-  
-      // Spawn a coin for destroying the block
-      let coin = this.coins.create(block.x, block.y, 'coin');
-      coin.setCollideWorldBounds(true);
-      // coin.setVelocity(0, 100);
-      coin.setGravityY(80);
-    }, null, this);
+    this.physics.add.collider(this.balls, this.blocks, this.ballHitsBlock, null, this);
   
     // Create bottom ground (ball and coin killer)
     this.ground =  this.physics.add.staticImage(0, 796, 'ground').setOrigin(0, 0).refreshBody();
@@ -152,6 +143,16 @@ class GameScene extends Phaser.Scene {
     this.sound.play('coin-eat');
     this.score += 10;
     this.scoreText.setText('score: ' + this.score);
+  }
+
+  ballHitsBlock(ball, block) {
+    block.disableBody(true, true);
+    this.sound.play('block');
+
+    // Spawn a coin for destroying the block
+    let coin = this.coins.create(block.x, block.y, 'coin');
+    coin.setCollideWorldBounds(true);
+    coin.setGravityY(80);
   }
 
 };

@@ -1,4 +1,5 @@
 import MapLoader from './MapLoader.js';
+import Paddle from './Paddle.js';
 
 const gameParams = {
   lives: 3,
@@ -71,21 +72,21 @@ class GameScene extends Phaser.Scene {
   update() {
     // Check for keyboard events
     if (this.cursors.left.isDown) {
-      this.paddle.setVelocityX(-gameParams.paddle.max_speed);
+      this.paddle.moveTowardsLeft();
     }
     else if (this.cursors.right.isDown) {
-      this.paddle.setVelocityX(gameParams.paddle.max_speed);
+      this.paddle.moveTowardsRight();
     }
     else {
-      this.paddle.setVelocityX(0);
+      this.paddle.stopMoving();
     }
 
     if (this.pointer.x - 10 > this.paddle.x) {
-      this.paddle.setVelocityX(gameParams.paddle.max_speed);
+      this.paddle.moveTowardsRight();
     } else if (this.pointer.x + 10 < this.paddle.x) {
-      this.paddle.setVelocityX(-gameParams.paddle.max_speed);
+      this.paddle.moveTowardsLeft();
     } else {
-      this.paddle.setVelocityX(0);
+      this.paddle.stopMoving();
     }
   }
 
@@ -105,11 +106,7 @@ class GameScene extends Phaser.Scene {
   }
 
   createPaddle() {
-    let paddle = this.physics.add.image(640, 780, 'paddle').setScale(gameParams.paddle.initial_size, 1);
-    paddle.setCollideWorldBounds(true);
-      // Paddle should be sprite: < = >, shich we can stitch together to make a sized paddle
-    paddle.setImmovable();    // Dont allow paddle to be knocked away by ball
-    return paddle;
+    return new Paddle(this, 640, 780, 'paddle', gameParams.paddle.initial_size, gameParams.paddle.max_speed);
   }
 
   addBall(balls) {

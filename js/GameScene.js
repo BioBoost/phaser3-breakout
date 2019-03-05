@@ -3,7 +3,7 @@ import MapLoader from './MapLoader.js';
 const gameParams = {
   lives: 3,
   paddle: {
-    max_speed: 500,
+    max_speed: 800,
     initial_size: 4
   }
 };
@@ -62,6 +62,7 @@ class GameScene extends Phaser.Scene {
   
     // Register events for keyboard
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.pointer = this.input.activePointer;
   
     // Paddle collisions with the coins
     this.physics.add.overlap(this.paddle, this.coins, this.paddleCollectsCoin, null, this);
@@ -76,6 +77,14 @@ class GameScene extends Phaser.Scene {
       this.paddle.setVelocityX(gameParams.paddle.max_speed);
     }
     else {
+      this.paddle.setVelocityX(0);
+    }
+
+    if (this.pointer.x - 10 > this.paddle.x) {
+      this.paddle.setVelocityX(gameParams.paddle.max_speed);
+    } else if (this.pointer.x + 10 < this.paddle.x) {
+      this.paddle.setVelocityX(-gameParams.paddle.max_speed);
+    } else {
       this.paddle.setVelocityX(0);
     }
   }
